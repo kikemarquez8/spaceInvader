@@ -7,6 +7,7 @@ var barriers = [];
 var movement = false;
 var direction = true;
 var created = false;
+var speed= {"x":20,"y":20};
 function mainLoop(){
 
 }
@@ -16,11 +17,13 @@ function drawCanvas(){
     ctx.fillRect(0,0,600,600);
     if(!created){
         if(drawAliens(5,10,["alien1","alien2","alien2","alien3","alien3"],{"x":105,"y":30},30,30)){
+            if(drawRow({"x":40,"y":390},4,"barrier",120))
             created=true;
         }
     }
     if(created){
-        moveAliens(5,20);
+        drawBarriers();
+        moveAliens(speed.x,speed.y);
         setTimeout(drawCanvas,500);
     };
 }
@@ -35,6 +38,8 @@ function drawRow(begining,number,type,distance){
     var sprite = new Sprite(type,begin.x,begin.y);
     if(type.substring(0,type.length-1)=="alien")
         aliens.push(sprite);
+    if(type=="barrier")
+        barriers.push(sprite);
     begin.x = begin.x+distance;
     var end = drawRow(begin,number-1,type,distance);
     if(end){
@@ -52,7 +57,7 @@ function drawAliens(numrows,numcolumns,types,begining,distancex,distancey){
         };
     };
     return true;
-}
+};
 function moveAliens(movementx,movementy){
     var cw = document.getElementById('gameCanvas').width;
     for(var i = 0; i<aliens.length;i++){
@@ -76,5 +81,9 @@ function moveAliens(movementx,movementy){
         }
     });
     movement=false;
-
+};
+function drawBarriers(){
+    for(var i = 0; i<barriers.length;i++){
+        barriers[i].changeState(true);
+    }
 }

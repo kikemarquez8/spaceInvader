@@ -58,8 +58,8 @@ var spritesConfig= {
         loaded: false
     },
     "barrier": {
-        width:40,
-        height:20,
+        width:60,
+        height:40,
         path: ['images/barrier1.png','images/barrier2.jpg','images/barrier3.jpg','images/barrier4.jpg','images/barrier5.jpg'],
         numberOfStates: 5,
         image: [new Image(),new Image(),new Image(),new Image()],
@@ -95,14 +95,18 @@ function Sprite(type,x,y){
         }
     };
     preload();
-    var draw = function(image){
+    this.draw = function(image){
         var ctx = document.getElementById('gameCanvas').getContext('2d');
         ctx.drawImage(image,coordinates.x,coordinates.y, coordinates.w,coordinates.h);
     };
-    this.changeState = function(){
+    this.changeState = function(current){
         // used to create animation
-        state == maxState? state=0:state++;
-        draw(image[state]);
+        if(current== false || current === "undefined") {
+            state == maxState ? state = 0 : state++;
+            this.draw(image[state]);
+        }else{
+            this.draw(image[state]);
+        }
     };
     this.updatePosition = function(incx,incy){
         coordinates.x = coordinates.x+incx;
@@ -111,11 +115,7 @@ function Sprite(type,x,y){
     };
     this.getCoordinates = function(){return coordinates;};
     if(image[0].complete) {
-        draw(image[0]);
-    }else{
-        image[0].onload = function(){
-            draw(this);
-        };
+        this.draw(image[0]);
     }
 };
 
