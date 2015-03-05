@@ -1,31 +1,8 @@
 /**
  * Created by Kike Marquez on 2/28/15.
  */
-var aliens = [];
-var shooter;
-var barriers = [];
-var movement = false;
-var direction = true;
-var created = false;
-var speed= {"x":20,"y":20};
 function mainLoop(){
 
-}
-function drawCanvas(){
-    var ctx = document.getElementById('gameCanvas').getContext('2d');
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0,0,600,600);
-    if(!created){
-        if(drawAliens(5,10,["alien1","alien2","alien2","alien3","alien3"],{"x":105,"y":30},30,30)){
-            if(drawRow({"x":40,"y":390},4,"barrier",120))
-            created=true;
-        }
-    }
-    if(created){
-        drawBarriers();
-        moveAliens(speed.x,speed.y);
-        setTimeout(drawCanvas,500);
-    };
 }
 /*drawRow gets the begining (x,y) of the sprite in the row,
 the number of sprites to be inserted  and the type of the sprite.*/
@@ -40,6 +17,8 @@ function drawRow(begining,number,type,distance){
         aliens.push(sprite);
     if(type=="barrier")
         barriers.push(sprite);
+    if(type=="shooter")
+        shooter=sprite;
     begin.x = begin.x+distance;
     var end = drawRow(begin,number-1,type,distance);
     if(end){
@@ -85,5 +64,40 @@ function moveAliens(movementx,movementy){
 function drawBarriers(){
     for(var i = 0; i<barriers.length;i++){
         barriers[i].changeState(true);
+
     }
+};
+function drawShooter(){
+    shooter.changeState(shooterAlive);
+};
+window.addEventListener("keydown", function (event) {
+
+    switch (event.keyCode) {
+        case 37:
+            //Left Arrow.
+            if(shooter.getCoordinates().x-8>0)
+                shooter.updatePosition(-8,0);
+            break;
+        case 39:
+            //Right Arrow.
+            var canvas = document.getElementById('gameCanvas').width;
+            if(shooter.getCoordinates().x+shooter.getCoordinates().w < canvas)
+               shooter.updatePosition(8,0);
+            break;
+        case 32:
+            if(bullet == null) {
+                console.log("newBullet");
+                var bulletx = shooter.getCoordinates().x + (shooter.getCoordinates().w / 2);
+                bullet = new Sprite("bullet", bulletx, shooter.getCoordinates().h);
+            }
+            break;
+        default:
+            return; // Quit when this doesn't handle the key event.
+    }
+
+    // Consume the event for suppressing "double action".
+    event.preventDefault();
+}, true);
+function drawBullet(){
+    bullet.updatePosition(0,5);
 }

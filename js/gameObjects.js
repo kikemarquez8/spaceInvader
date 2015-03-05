@@ -10,8 +10,7 @@ var spritesConfig= {
         image: [new Image(),new Image()],
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
     },
     "alien2": {
         width:20,
@@ -21,8 +20,7 @@ var spritesConfig= {
         image: [new Image(),new Image()],
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
     },
     "alien3": {
         width:20,
@@ -32,30 +30,27 @@ var spritesConfig= {
         image: [new Image(),new Image()],
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
     },
     "alienship": {
         width:40,
         height:20,
-        path: 'images/alienship.png',
+        path: ['images/alienship.png'],
         numberOfStates: 1,
         image: new Image(),
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
     },
     "shooter": {
-        width:25,
+        width:35,
         height:15,
         path: ['images/shooter1.png','images/shooter2.jpg'],
         numberOfStates: 2,
         image: [new Image(),new Image()],
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
     },
     "barrier": {
         width:60,
@@ -65,8 +60,17 @@ var spritesConfig= {
         image: [new Image(),new Image(),new Image(),new Image()],
         getImage: function(){
             return this.image;
-        },
-        loaded: false
+        }
+    },
+    "bullet":{
+        width:60,
+        height:40,
+        path: ['images/bullet.png'],
+        numberOfStates: 1,
+        image: new Image(),
+        getImage: function(){
+            return this.image;
+        }
     }
 };
 loadImages();
@@ -88,34 +92,27 @@ function Sprite(type,x,y){
         "w": sprite.width,
         "h": sprite.height
     };
-    var preload = function() {
-        for (var i = 0; i < image.length; i++) {
-            image[i].width = sprite.width;
-            image[i].height = sprite.height;
-        }
-    };
-    preload();
-    this.draw = function(image){
+    var draw = function(image){
         var ctx = document.getElementById('gameCanvas').getContext('2d');
         ctx.drawImage(image,coordinates.x,coordinates.y, coordinates.w,coordinates.h);
     };
     this.changeState = function(current){
         // used to create animation
-        if(current== false || current === "undefined") {
-            state == maxState ? state = 0 : state++;
-            this.draw(image[state]);
+        if(current== false || current === undefined) {
+            state == maxState? state = 0:state++;
+            draw(image[state]);
         }else{
-            this.draw(image[state]);
+            draw(image[state]);
         }
     };
     this.updatePosition = function(incx,incy){
         coordinates.x = coordinates.x+incx;
         coordinates.y = coordinates.y+incy;
-        this.changeState();
+        type=="shooter"? this.changeState(true):this.changeState();
     };
     this.getCoordinates = function(){return coordinates;};
     if(image[0].complete) {
-        this.draw(image[0]);
+        draw(image[0]);
     }
 };
 
