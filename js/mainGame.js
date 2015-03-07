@@ -9,8 +9,8 @@ var movement = false;
 var direction = true;
 var created = false;
 var shooterAlive = true;
-var speed= {"x":2,"y":2};
-var multishot = false;
+var speed= {"x":2,"y":10};
+var multishot = true;
 
 function drawCanvas(){
     var ctx = document.getElementById('gameCanvas').getContext('2d');
@@ -29,6 +29,6 @@ function drawCanvas(){
         drawBarriers();
         moveAliens(speed.x,speed.y);
         drawShooter();
-        setTimeout(drawCanvas,1000/50);//frames per second
+        setTimeout(drawCanvas,1000/33);//frames per second
     };
 };

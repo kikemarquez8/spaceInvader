@@ -103,25 +103,28 @@ window.addEventListener("keydown", function (event) {
             return; // Quit when this doesn't handle the key event.
     }
 
-    // Consume the event for suppressing "double action".
-    event.preventDefault();
 }, true);
 function drawBullet(){
     bullet.forEach(function(elementb, index, array){
+        if(bullet[index].getCoordinates().y<=0) {
+            bullet.splice(index, 1);
+        }
         aliens.forEach(function(elementa,indexalien,arraya){//Colision detection
-            if (elementb.getCoordinates().x < elementa.getCoordinates().x + elementa.getCoordinates().w &&
-                elementb.getCoordinates().x + elementb.getCoordinates().w > elementa.getCoordinates().x &&
-                elementb.getCoordinates().y < elementa.getCoordinates().y + elementa.getCoordinates().h &&
-                elementb.getCoordinates().y > elementa.getCoordinates().y){
+            if (BulletHittedAlien(elementb,elementa)){
                 //colision
                 bullet.splice(index,1);
                 aliens.splice(indexalien,1);
             }
         });
-        if(elementb.getCoordinates().y<=0) {
-            bullet.splice(index, 1);
-        }
-        if(elementb != null)
-            elementb.updatePosition(0,-50);
+        if(bullet[index] != undefined)
+            bullet[index].updatePosition(0,-20);
     });
 }
+
+
+var BulletHittedAlien = function (bullet, alien){
+    return (bullet.getCoordinates().x < alien.getCoordinates().x + alien.getCoordinates().w &&
+            bullet.getCoordinates().x + bullet.getCoordinates().w > alien.getCoordinates().x &&
+            bullet.getCoordinates().y < alien.getCoordinates().y + alien.getCoordinates().h &&
+            bullet.getCoordinates().y +bullet.getCoordinates().h > alien.getCoordinates().y);
+    };
