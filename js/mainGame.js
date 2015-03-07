@@ -2,14 +2,15 @@
  * Created by Kike Marquez on 2/28/15.
  */
 var aliens = [];
-var shooter;
+var shooter = [];
 var barriers = [];
-var bullet;
+var bullet= [];
 var movement = false;
 var direction = true;
 var created = false;
 var shooterAlive = true;
-var speed= {"x":20,"y":20};
+var speed= {"x":2,"y":2};
+var multishot = false;
 
 function drawCanvas(){
     var ctx = document.getElementById('gameCanvas').getContext('2d');
@@ -23,10 +24,11 @@ function drawCanvas(){
         }
     }
     if(created){
-        if(bullet) drawBullet();
+        if(bullet[0] != null)
+            drawBullet();
         drawBarriers();
         moveAliens(speed.x,speed.y);
         drawShooter();
-        setTimeout(drawCanvas,200);
+        setTimeout(drawCanvas,1000/50);//frames per second
     };
 };

@@ -85,10 +85,18 @@ window.addEventListener("keydown", function (event) {
                shooter.updatePosition(8,0);
             break;
         case 32:
-            if(bullet == null) {
+            if(multishot)
+            {
                 console.log("newBullet");
-                var bulletx = shooter.getCoordinates().x + (shooter.getCoordinates().w / 2);
-                bullet = new Sprite("bullet", bulletx, shooter.getCoordinates().h);
+                var bulletx = shooter.getCoordinates().x + spritesConfig.shooter.width/2 - spritesConfig.bullet.width/2;
+                var bullety = document.getElementById('gameCanvas').height - shooter.getCoordinates().h-spritesConfig.bullet.height;
+                bullet.push (new Sprite("bullet", bulletx, bullety));
+            }else{
+                if(bullet[0]==null){
+                    var bulletx = shooter.getCoordinates().x + spritesConfig.shooter.width/2 - spritesConfig.bullet.width/2;
+                    var bullety = document.getElementById('gameCanvas').height - shooter.getCoordinates().h-spritesConfig.bullet.height;
+                    bullet.push (new Sprite("bullet", bulletx, bullety));
+                }
             }
             break;
         default:
@@ -99,5 +107,21 @@ window.addEventListener("keydown", function (event) {
     event.preventDefault();
 }, true);
 function drawBullet(){
-    bullet.updatePosition(0,5);
+    bullet.forEach(function(elementb, index, array){
+        aliens.forEach(function(elementa,indexalien,arraya){//Colision detection
+            if (elementb.getCoordinates().x < elementa.getCoordinates().x + elementa.getCoordinates().w &&
+                elementb.getCoordinates().x + elementb.getCoordinates().w > elementa.getCoordinates().x &&
+                elementb.getCoordinates().y < elementa.getCoordinates().y + elementa.getCoordinates().h &&
+                elementb.getCoordinates().y > elementa.getCoordinates().y){
+                //colision
+                bullet.splice(index,1);
+                aliens.splice(indexalien,1);
+            }
+        });
+        if(elementb.getCoordinates().y<=0) {
+            bullet.splice(index, 1);
+        }
+        if(elementb != null)
+            elementb.updatePosition(0,-50);
+    });
 }

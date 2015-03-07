@@ -63,11 +63,11 @@ var spritesConfig= {
         }
     },
     "bullet":{
-        width:60,
-        height:40,
+        width:4,
+        height:5,
         path: ['images/bullet.png'],
         numberOfStates: 1,
-        image: new Image(),
+        image: [new Image()],
         getImage: function(){
             return this.image;
         }
