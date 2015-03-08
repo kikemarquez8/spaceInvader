@@ -92,17 +92,17 @@ function Sprite(type,x,y){
         "w": sprite.width,
         "h": sprite.height
     };
-    var draw = function(image){
+    this.draw = function(){
         var ctx = document.getElementById('gameCanvas').getContext('2d');
-        ctx.drawImage(image,coordinates.x,coordinates.y, coordinates.w,coordinates.h);
+        ctx.drawImage(image[state],coordinates.x,coordinates.y, coordinates.w,coordinates.h);
     };
     this.changeState = function(current){
         // used to create animation
         if(current== false || current === undefined) {
             state == maxState? state = 0:state++;
-            draw(image[state]);
+            this.draw();
         }else{
-            draw(image[state]);
+            this.draw();
         }
     };
     this.updatePosition = function(incx,incy){
@@ -112,7 +112,7 @@ function Sprite(type,x,y){
     };
     this.getCoordinates = function(){return coordinates;};
     if(image[0].complete) {
-        draw(image[0]);
+        this.draw();
     }
 };
 

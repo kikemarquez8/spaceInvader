@@ -25,7 +25,7 @@ function drawRow(begining,number,type,distance){
         return true;
     }
 };
-function drawAliens(numrows,numcolumns,types,begining,distancex,distancey){
+function createAliens(numrows,numcolumns,types,begining,distancex,distancey){
     var i = 0;
     var begin = begining;
     while((i)!=numrows){
@@ -114,6 +114,9 @@ function drawBullet(){
                 //colision
                 bullet.splice(index,1);
                 aliens.splice(indexalien,1);
+                speed.x+= increase.x;
+                if(aliens.length<10)
+                    speed.y+=increase.y;
             }
         });
         if(bullet[index] != undefined)
@@ -122,9 +125,14 @@ function drawBullet(){
 }
 
 
-var BulletHittedAlien = function (bullet, alien){
+ function BulletHittedAlien(bullet, alien){
     return (bullet.getCoordinates().x < alien.getCoordinates().x + alien.getCoordinates().w &&
             bullet.getCoordinates().x + bullet.getCoordinates().w > alien.getCoordinates().x &&
             bullet.getCoordinates().y < alien.getCoordinates().y + alien.getCoordinates().h &&
             bullet.getCoordinates().y +bullet.getCoordinates().h > alien.getCoordinates().y);
     };
+function drawAliens(){
+    aliens.forEach(function(element,index,array){
+        aliens[index].draw();
+    })
+}
